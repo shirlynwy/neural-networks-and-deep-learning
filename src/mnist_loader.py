@@ -10,7 +10,7 @@ function usually called by our neural network code.
 
 #### Libraries
 # Standard library
-import cPickle
+import _pickle as cPickle # changed from py2 to py3
 import gzip
 
 # Third-party libraries
@@ -40,9 +40,14 @@ def load_data():
     below.
     """
     f = gzip.open('../data/mnist.pkl.gz', 'rb')
-    training_data, validation_data, test_data = cPickle.load(f)
+    imported = cPickle.Unpickler(file=f, encoding='latin1') # changed from py2 to py3
+    training_data, validation_data, test_data = imported.load() # changed from py2 to py3
     f.close()
     return (training_data, validation_data, test_data)
+
+    #     u = pickle._Unpickler( f )
+    # u.encoding = 'latin1'
+    # train, val, test = u.load()
 
 def load_data_wrapper():
     """Return a tuple containing ``(training_data, validation_data,
@@ -73,6 +78,10 @@ def load_data_wrapper():
     validation_data = zip(validation_inputs, va_d[1])
     test_inputs = [np.reshape(x, (784, 1)) for x in te_d[0]]
     test_data = zip(test_inputs, te_d[1])
+    # below 3 lines changed from py2 to py3
+    test_data = list(test_data)
+    training_data = list(training_data)
+    validation_data = list(validation_data)
     return (training_data, validation_data, test_data)
 
 def vectorized_result(j):
