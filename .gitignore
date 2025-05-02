@@ -3,6 +3,7 @@
 *.pem
 *.pkl
 *.pyc
+*.pdf
 .DS_Store
 loc.py
 src/ec2
